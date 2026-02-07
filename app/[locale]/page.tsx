@@ -1,18 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { nanoid } from "nanoid";
 import { getSocket } from "@/lib/socket";
+import { useTranslations } from "next-intl";
 
 export default function Home() {
   const router = useRouter();
+  const t = useTranslations('home');
   const [roomPassword, setRoomPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const createNewRoom = () => {
     if (!roomPassword.trim()) {
-      alert("Please enter a room password");
+      alert(t('roomPasswordPlaceholder'));
       return;
     }
 
@@ -37,9 +39,9 @@ export default function Home() {
       <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full">
         <div className="text-center mb-8">
           <h1 className="text-5xl font-bold text-gray-800 mb-2">
-            Impostor Game
+            {t('title')}
           </h1>
-          <p className="text-gray-600">Find the impostor among you</p>
+          <p className="text-gray-600">{t('subtitle')}</p>
         </div>
 
         <div className="space-y-4">
@@ -48,14 +50,14 @@ export default function Home() {
               htmlFor="password"
               className="block text-sm font-medium text-gray-700 mb-2"
             >
-              Room Password
+              {t('roomPassword')}
             </label>
             <input
               id="password"
               type="text"
               value={roomPassword}
               onChange={(e) => setRoomPassword(e.target.value)}
-              placeholder="Enter room password"
+              placeholder={t('roomPasswordPlaceholder')}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
               onKeyPress={(e) => e.key === "Enter" && createNewRoom()}
             />
@@ -66,13 +68,13 @@ export default function Home() {
             disabled={loading}
             className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-4 px-6 rounded-lg hover:from-purple-700 hover:to-pink-700 transition transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           >
-            {loading ? "Creating..." : "Create New Room"}
+            {loading ? t('creating') : t('createRoom')}
           </button>
         </div>
 
         <div className="mt-8 pt-6 border-t border-gray-200">
           <p className="text-sm text-gray-500 text-center">
-            Share the room link with your friends to play together!
+            {t('shareInfo')}
           </p>
         </div>
       </div>

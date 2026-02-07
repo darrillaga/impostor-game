@@ -1,0 +1,91 @@
+{
+  "metadata": {
+    "title": "Juego del Impostor - ¡Encuentra al Impostor!",
+    "description": "Un juego multijugador de deducción social donde los jugadores deben encontrar al impostor entre ellos"
+  },
+  "home": {
+    "title": "Juego del Impostor",
+    "subtitle": "Encuentra al impostor entre ustedes",
+    "roomPassword": "Contraseña de Sala",
+    "roomPasswordPlaceholder": "Ingresa la contraseña de sala",
+    "creating": "Creando...",
+    "createRoom": "Crear Nueva Sala",
+    "shareInfo": "¡Comparte el enlace de la sala con tus amigos para jugar juntos!"
+  },
+  "join": {
+    "title": "Unirse a la Sala",
+    "yourName": "Tu Nombre",
+    "namePlaceholder": "Ingresa tu nombre",
+    "roomPassword": "Contraseña de Sala",
+    "passwordPlaceholder": "Ingresa la contraseña de sala",
+    "joinButton": "Unirse al Juego",
+    "roomCode": "Código de Sala: {code}",
+    "errorName": "Por favor ingresa tu nombre",
+    "errorPassword": "Por favor ingresa la contraseña de sala"
+  },
+  "lobby": {
+    "title": "Sala de Espera",
+    "roomCode": "Código de Sala: {code}",
+    "copyLink": "Copiar Enlace de Compartir",
+    "players": "Jugadores ({count})",
+    "host": "Anfitrión",
+    "impostorCount": "Número de Impostores",
+    "needPlayers": "Se necesitan al menos 3 jugadores para comenzar",
+    "impostorLimit": "El número de impostores debe ser menor que el total de jugadores",
+    "startGame": "Iniciar Juego",
+    "waiting": "Esperando a que el anfitrión inicie el juego..."
+  },
+  "wordReveal": {
+    "category": "Categoría",
+    "impostor": "ERES EL IMPOSTOR",
+    "clue": "Pista:",
+    "yourWord": "Tu Palabra",
+    "waiting": "Esperando a que otros jugadores revelen...",
+    "swipeUp": "Desliza hacia arriba para revelar",
+    "swipeButton": "Deslizar Arriba",
+    "dragInstruction": "Arrastra la tarjeta hacia arriba para ver tu rol"
+  },
+  "discussion": {
+    "title": "Ronda {round} - Tiempo de Discusión",
+    "instruction": "¡Discutan quién creen que es el impostor!",
+    "startVoting": "Iniciar Votación"
+  },
+  "voting": {
+    "title": "Tiempo de Votación",
+    "instruction": "¿Quién crees que es el impostor?",
+    "votes": "Votos: {voted} / {alive}",
+    "eliminated": "Has sido eliminado. Esperando a que otros voten...",
+    "submitted": "Voto Enviado",
+    "waiting": "Esperando a otros jugadores..."
+  },
+  "results": {
+    "impostorsWin": "¡Los Impostores Ganan!",
+    "normalsWin": "¡Los Jugadores Normales Ganan!",
+    "impostorsList": "Los Impostores Fueron:",
+    "wasImpostor": "¡Era un Impostor!",
+    "roundResults": "Resultados de la Ronda {round}",
+    "eliminated": "Eliminado",
+    "noElimination": "Sin eliminación esta ronda (empate en votos)",
+    "playAgain": "Jugar de Nuevo",
+    "nextRound": "Siguiente Ronda",
+    "waitingNewGame": "Esperando a que el anfitrión inicie un nuevo juego...",
+    "waitingNextRound": "Esperando a que el anfitrión inicie la siguiente ronda..."
+  },
+  "leaderboard": {
+    "title": "Tabla de Posiciones",
+    "you": "(Tú)",
+    "eliminated": "Eliminado"
+  },
+  "categories": {
+    "Animals": "Animales",
+    "Countries": "Países",
+    "Food": "Comida",
+    "Sports": "Deportes",
+    "Professions": "Profesiones",
+    "Colors": "Colores",
+    "Movie Genres": "Géneros de Películas",
+    "Technology": "Tecnología",
+    "Music Genres": "Géneros Musicales",
+    "Vehicles": "Vehículos"
+  }
+}

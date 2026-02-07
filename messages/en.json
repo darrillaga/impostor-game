@@ -1,0 +1,91 @@
+{
+  "metadata": {
+    "title": "Impostor Game - Find the Impostor!",
+    "description": "A multiplayer social deduction game where players must find the impostor among them"
+  },
+  "home": {
+    "title": "Impostor Game",
+    "subtitle": "Find the impostor among you",
+    "roomPassword": "Room Password",
+    "roomPasswordPlaceholder": "Enter room password",
+    "creating": "Creating...",
+    "createRoom": "Create New Room",
+    "shareInfo": "Share the room link with your friends to play together!"
+  },
+  "join": {
+    "title": "Join Room",
+    "yourName": "Your Name",
+    "namePlaceholder": "Enter your name",
+    "roomPassword": "Room Password",
+    "passwordPlaceholder": "Enter room password",
+    "joinButton": "Join Game",
+    "roomCode": "Room Code: {code}",
+    "errorName": "Please enter your name",
+    "errorPassword": "Please enter room password"
+  },
+  "lobby": {
+    "title": "Game Lobby",
+    "roomCode": "Room Code: {code}",
+    "copyLink": "Copy Share Link",
+    "players": "Players ({count})",
+    "host": "Host",
+    "impostorCount": "Number of Impostors",
+    "needPlayers": "Need at least 3 players to start",
+    "impostorLimit": "Impostor count must be less than total players",
+    "startGame": "Start Game",
+    "waiting": "Waiting for host to start the game..."
+  },
+  "wordReveal": {
+    "category": "Category",
+    "impostor": "YOU ARE THE IMPOSTOR",
+    "clue": "Clue:",
+    "yourWord": "Your Word",
+    "waiting": "Waiting for other players to reveal...",
+    "swipeUp": "Swipe up to reveal",
+    "swipeButton": "Swipe Up",
+    "dragInstruction": "Drag the card upward to see your role"
+  },
+  "discussion": {
+    "title": "Round {round} - Discussion Time",
+    "instruction": "Discuss who you think the impostor is!",
+    "startVoting": "Start Voting"
+  },
+  "voting": {
+    "title": "Voting Time",
+    "instruction": "Who do you think is the impostor?",
+    "votes": "Votes: {voted} / {alive}",
+    "eliminated": "You have been eliminated. Waiting for others to vote...",
+    "submitted": "Vote Submitted",
+    "waiting": "Waiting for other players..."
+  },
+  "results": {
+    "impostorsWin": "Impostors Win!",
+    "normalsWin": "Normal Players Win!",
+    "impostorsList": "The Impostors Were:",
+    "wasImpostor": "Was an Impostor!",
+    "roundResults": "Round {round} Results",
+    "eliminated": "Eliminated",
+    "noElimination": "No elimination this round (tie vote)",
+    "playAgain": "Play Again",
+    "nextRound": "Next Round",
+    "waitingNewGame": "Waiting for host to start a new game...",
+    "waitingNextRound": "Waiting for host to start next round..."
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "you": "(You)",
+    "eliminated": "Eliminated"
+  },
+  "categories": {
+    "Animals": "Animals",
+    "Countries": "Countries",
+    "Food": "Food",
+    "Sports": "Sports",
+    "Professions": "Professions",
+    "Colors": "Colors",
+    "Movie Genres": "Movie Genres",
+    "Technology": "Technology",
+    "Music Genres": "Music Genres",
+    "Vehicles": "Vehicles"
+  }
+}

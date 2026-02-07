@@ -1,36 +1,134 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Impostor Game
+
+A multiplayer social deduction game where players must find the impostor among them!
+
+## Features
+
+- **Mobile-First Design**: Optimized for touch devices with swipe gestures
+- **Real-Time Multiplayer**: Socket.io powered real-time game synchronization
+- **Room System**: Create private rooms with password protection
+- **Swipe-to-Reveal**: Interactive card swipe gesture to reveal your word/role
+- **Multiple Game Modes**: Support for 1-3 impostors
+- **Persistent Leaderboard**: Scores tracked across multiple rounds in the same room
+- **Reconnection Support**: Automatically rejoin if you refresh or disconnect
+- **10 Categories**: Animals, Countries, Food, Sports, Professions, Colors, Movie Genres, Technology, Music Genres, and Vehicles
+
+## Game Flow
+
+1. **Lobby**:
+   - First player becomes the host
+   - Host selects number of impostors (1-3)
+   - Share room link with friends
+   - Host starts game when ready (minimum 3 players)
+
+2. **Word Reveal**:
+   - Swipe up to reveal your role
+   - Normal players see the secret word
+   - Impostors see only the category + a subtle clue
+
+3. **Discussion**:
+   - Talk with other players to figure out who's the impostor
+   - Host controls when to move to voting
+
+4. **Voting**:
+   - Everyone votes to eliminate one player
+   - Eliminated player's role is revealed
+   - Tie votes result in no elimination
+
+5. **Results**:
+   - Game ends when all impostors are found (normals +1 point each)
+   - Or when impostors equal/outnumber normals (impostors +2 points each)
+   - Play multiple rounds to build the leaderboard!
+
+## Tech Stack
+
+- **Next.js 14** - React framework with App Router
+- **TypeScript** - Type safety
+- **Socket.io** - Real-time WebSocket communication
+- **Tailwind CSS** - Styling
+- **Framer Motion** - Swipe gesture animations
 
 ## Getting Started
 
-First, run the development server:
+### Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+impostor-game/
+├── app/
+│   ├── page.tsx              # Home page (create room)
+│   ├── room/[id]/page.tsx    # Game room
+│   └── layout.tsx            # Root layout
+├── components/
+│   ├── Lobby.tsx             # Pre-game lobby
+│   ├── WordReveal.tsx        # Swipe-up word reveal
+│   ├── VotingPhase.tsx       # Voting interface
+│   ├── Results.tsx           # Round/game results
+│   └── Leaderboard.tsx       # Score display
+├── lib/
+│   ├── socket.ts             # Socket.io client
+│   ├── gameData.ts           # Categories & words
+│   └── gameLogic.ts          # Game state management
+├── server/
+│   └── socketServer.ts       # Socket.io server logic
+└── server.ts                 # Custom Next.js + Socket.io server
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## How to Play
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Create a Room**:
+   - Go to the home page
+   - Enter a room password
+   - Click "Create New Room"
 
-## Deploy on Vercel
+2. **Invite Players**:
+   - Share the room link (it includes the password)
+   - Wait for at least 3 players to join
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **Start Game**:
+   - Host selects number of impostors
+   - Host clicks "Start Game"
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. **Reveal Your Role**:
+   - Swipe up on the card to see if you're normal or impostor
+   - Memorize your word (or clue if impostor)
+
+5. **Discussion & Voting**:
+   - Discuss with other players
+   - Vote to eliminate suspected impostors
+   - Continue until game ends
+
+6. **Play Again**:
+   - Scores persist across games in the same room
+   - Host can start a new game anytime
+
+## Tips for Players
+
+**If you're Normal**:
+- Remember your exact word
+- Listen for impostors who might use vague language
+- Work together to identify suspicious players
+
+**If you're Impostor**:
+- Use the clue carefully (it's generic but can help)
+- Listen to normal players and blend in
+- Avoid being too specific or too vague
+
+## License
+
+MIT

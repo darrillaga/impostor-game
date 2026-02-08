@@ -136,7 +136,9 @@ export function initSocketServer(httpServer: HTTPServer) {
           phase: "reveal",
           category: category.name,
           word: p.isImpostor ? null : word.word,
+          wordEs: p.isImpostor ? null : word.wordEs,
           impostorClue: p.isImpostor ? word.impostorClue : null,
+          impostorClueEs: p.isImpostor ? word.impostorClueEs : null,
           isImpostor: p.isImpostor,
         });
       });
@@ -150,13 +152,24 @@ export function initSocketServer(httpServer: HTTPServer) {
       if (player) {
         player.revealedWord = true;
       }
+    });
 
-      // Check if all players revealed
-      const allRevealed = Array.from(gameState.players.values()).every(
+    socket.on("playerReady", ({ roomId }) => {
+      const gameState = rooms.get(roomId);
+      if (!gameState) return;
+
+      const player = gameState.players.get(socket.id);
+      if (!player) return;
+
+      // Mark player as ready (reuse revealedWord flag)
+      player.revealedWord = true;
+
+      // Check if all alive players are ready
+      const allReady = Array.from(gameState.players.values()).every(
         p => p.revealedWord || !p.isAlive
       );
 
-      if (allRevealed) {
+      if (allReady) {
         gameState.phase = "discussion";
         io.to(roomId).emit("phaseChanged", {
           phase: "discussion",

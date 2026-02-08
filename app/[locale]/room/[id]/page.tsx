@@ -90,11 +90,15 @@ export default function RoomPage() {
     });
 
     socket.on("gameStarted", (data) => {
+      // Use localized word/clue based on current locale
+      const word = locale === 'es' ? data.wordEs : data.word;
+      const impostorClue = locale === 'es' ? data.impostorClueEs : data.impostorClue;
+
       setGameData({
         phase: data.phase,
         category: data.category,
-        word: data.word,
-        impostorClue: data.impostorClue,
+        word: word,
+        impostorClue: impostorClue,
         isImpostor: data.isImpostor,
         roundNumber: 1,
       });

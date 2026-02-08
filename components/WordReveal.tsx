@@ -33,6 +33,10 @@ export default function WordReveal({
     }
   };
 
+  const handleReady = () => {
+    getSocket().emit("playerReady", { roomId });
+  };
+
   if (revealed) {
     return (
       <div className="bg-white rounded-3xl shadow-2xl p-8 text-center min-h-[400px] flex flex-col items-center justify-center">
@@ -64,9 +68,12 @@ export default function WordReveal({
           </div>
         )}
 
-        <p className="mt-8 text-gray-500">
-          {t('waiting')}
-        </p>
+        <button
+          onClick={handleReady}
+          className="mt-8 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-3 px-8 rounded-lg hover:from-purple-700 hover:to-pink-700 transition transform hover:scale-105"
+        >
+          {t('ready')}
+        </button>
       </div>
     );
   }

@@ -2,14 +2,8 @@
 
 import { getSocket } from "@/lib/socket";
 import Leaderboard from "./Leaderboard";
-
-interface Player {
-  id: string;
-  name: string;
-  isImpostor: boolean;
-  isAlive: boolean;
-  score: number;
-}
+import { useTranslations } from "next-intl";
+import { Player } from "@/types/game";
 
 interface ResultsProps {
   roomId: string;
@@ -30,6 +24,8 @@ export default function Results({
   isHost,
   roundNumber,
 }: ResultsProps) {
+  const t = useTranslations('results');
+
   const handleNextRound = () => {
     getSocket().emit("nextRound", { roomId });
   };
@@ -45,14 +41,14 @@ export default function Results({
           <div>
             <h2 className="text-5xl font-bold mb-4">
               {impostorsWin ? (
-                <span className="text-red-600">Impostors Win!</span>
+                <span className="text-red-600">{t('impostorsWin')}</span>
               ) : (
-                <span className="text-green-600">Normal Players Win!</span>
+                <span className="text-green-600">{t('normalsWin')}</span>
               )}
             </h2>
             <div className="mb-6">
               <h3 className="text-2xl font-semibold text-gray-700 mb-4">
-                The Impostors Were:
+                {t('impostorsList')}
               </h3>
               <div className="space-y-2">
                 {players
@@ -73,18 +69,18 @@ export default function Results({
         ) : (
           <div>
             <h2 className="text-4xl font-bold text-gray-800 mb-4">
-              Round {roundNumber} Results
+              {t('roundResults', { round: roundNumber })}
             </h2>
             {eliminatedPlayer ? (
               <div className="mb-6">
                 <div className="inline-block bg-gray-100 border-2 border-gray-400 rounded-xl p-6">
-                  <p className="text-gray-600 mb-2">Eliminated</p>
+                  <p className="text-gray-600 mb-2">{t('eliminated')}</p>
                   <p className="text-3xl font-bold text-gray-800">
                     {eliminatedPlayer.name}
                   </p>
                   {eliminatedPlayer.isImpostor && (
                     <span className="inline-block mt-3 bg-red-500 text-white px-4 py-2 rounded-full text-sm font-bold">
-                      Was an Impostor!
+                      {t('wasImpostor')}
                     </span>
                   )}
                 </div>
@@ -93,7 +89,7 @@ export default function Results({
               <div className="mb-6">
                 <div className="inline-block bg-yellow-100 border-2 border-yellow-500 rounded-xl p-6">
                   <p className="text-xl font-semibold text-yellow-700">
-                    No elimination this round (tie vote)
+                    {t('noElimination')}
                   </p>
                 </div>
               </div>
@@ -111,14 +107,14 @@ export default function Results({
               onClick={handlePlayAgain}
               className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-4 px-6 rounded-lg hover:from-purple-700 hover:to-pink-700 transition transform hover:scale-105"
             >
-              Play Again
+              {t('playAgain')}
             </button>
           ) : (
             <button
               onClick={handleNextRound}
               className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-4 px-6 rounded-lg hover:from-purple-700 hover:to-pink-700 transition transform hover:scale-105"
             >
-              Next Round
+              {t('nextRound')}
             </button>
           )}
         </div>
@@ -127,8 +123,8 @@ export default function Results({
       {!isHost && (
         <div className="mt-8 text-center text-gray-600">
           {gameOver
-            ? "Waiting for host to start a new game..."
-            : "Waiting for host to start next round..."}
+            ? t('waitingNewGame')
+            : t('waitingNextRound')}
         </div>
       )}
     </div>

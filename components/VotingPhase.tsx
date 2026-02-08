@@ -2,13 +2,7 @@
 
 import { useState } from "react";
 import { getSocket } from "@/lib/socket";
-
-interface Player {
-  id: string;
-  name: string;
-  isAlive: boolean;
-  hasVoted?: boolean;
-}
+import { Player } from "@/types/game";
 
 interface VotingPhaseProps {
   roomId: string;

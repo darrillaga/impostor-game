@@ -8,26 +8,12 @@ import WordReveal from "@/components/WordReveal";
 import VotingPhase from "@/components/VotingPhase";
 import Results from "@/components/Results";
 import Leaderboard from "@/components/Leaderboard";
-
-interface Player {
-  id: string;
-  name: string;
-  isHost: boolean;
-  score: number;
-  isAlive: boolean;
-  hasVoted?: boolean;
-}
-
-interface GameData {
-  phase: string;
-  category: string | null;
-  word: string | null;
-  impostorClue: string | null;
-  isImpostor: boolean;
-  roundNumber: number;
-}
+import { useTranslations } from "next-intl";
+import { Player, GameData } from "@/types/game";
 
 export default function RoomPage() {
+  const t = useTranslations('join');
+  const tDiscussion = useTranslations('discussion');
   const params = useParams();
   const searchParams = useSearchParams();
   const roomId = params.id as string;
@@ -173,11 +159,11 @@ export default function RoomPage() {
 
   const handleJoin = () => {
     if (!playerName.trim()) {
-      setError("Please enter your name");
+      setError(t('errorName'));
       return;
     }
     if (!roomPassword.trim()) {
-      setError("Please enter room password");
+      setError(t('errorPassword'));
       return;
     }
 
@@ -196,7 +182,7 @@ export default function RoomPage() {
       <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-500 to-pink-500 flex items-center justify-center p-4">
         <div className="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full">
           <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-            Join Room
+            {t('title')}
           </h2>
 
           {error && (
@@ -208,13 +194,13 @@ export default function RoomPage() {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Your Name
+                {t('yourName')}
               </label>
               <input
                 type="text"
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
-                placeholder="Enter your name"
+                placeholder={t('namePlaceholder')}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
                 onKeyPress={(e) => e.key === "Enter" && handleJoin()}
               />
@@ -222,13 +208,13 @@ export default function RoomPage() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Room Password
+                {t('roomPassword')}
               </label>
               <input
                 type="text"
                 value={roomPassword}
                 onChange={(e) => setRoomPassword(e.target.value)}
-                placeholder="Enter room password"
+                placeholder={t('passwordPlaceholder')}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
                 onKeyPress={(e) => e.key === "Enter" && handleJoin()}
               />
@@ -238,12 +224,12 @@ export default function RoomPage() {
               onClick={handleJoin}
               className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-4 px-6 rounded-lg hover:from-purple-700 hover:to-pink-700 transition transform hover:scale-105"
             >
-              Join Game
+              {t('joinButton')}
             </button>
           </div>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-500">Room Code: {roomId}</p>
+            <p className="text-sm text-gray-500">{t('roomCode', { code: roomId })}</p>
           </div>
         </div>
       </div>
@@ -279,10 +265,10 @@ export default function RoomPage() {
         {gameData.phase === "discussion" && (
           <div className="bg-white rounded-3xl shadow-2xl p-8 text-center">
             <h2 className="text-3xl font-bold text-gray-800 mb-4">
-              Round {gameData.roundNumber} - Discussion Time
+              {tDiscussion('title', { round: gameData.roundNumber })}
             </h2>
             <p className="text-gray-600 mb-6">
-              Discuss who you think the impostor is!
+              {tDiscussion('instruction')}
             </p>
             <Leaderboard players={players} currentPlayerId={playerId!} />
             {isHost && (
@@ -290,7 +276,7 @@ export default function RoomPage() {
                 onClick={() => getSocket().emit("startVoting", { roomId })}
                 className="mt-6 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-3 px-8 rounded-lg hover:from-purple-700 hover:to-pink-700 transition transform hover:scale-105"
               >
-                Start Voting
+                {tDiscussion('startVoting')}
               </button>
             )}
           </div>

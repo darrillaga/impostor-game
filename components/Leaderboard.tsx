@@ -1,11 +1,7 @@
 "use client";
 
-interface Player {
-  id: string;
-  name: string;
-  score: number;
-  isAlive: boolean;
-}
+import { useTranslations } from "next-intl";
+import { Player } from "@/types/game";
 
 interface LeaderboardProps {
   players: Player[];
@@ -13,12 +9,13 @@ interface LeaderboardProps {
 }
 
 export default function Leaderboard({ players, currentPlayerId }: LeaderboardProps) {
+  const t = useTranslations('leaderboard');
   const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
 
   return (
     <div className="bg-gray-50 rounded-2xl p-6">
       <h3 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-        Leaderboard
+        {t('title')}
       </h3>
       <div className="space-y-2">
         {sortedPlayers.map((player, index) => (
@@ -37,10 +34,10 @@ export default function Leaderboard({ players, currentPlayerId }: LeaderboardPro
               <span className="font-semibold text-gray-800">
                 {player.name}
                 {player.id === currentPlayerId && (
-                  <span className="ml-2 text-purple-600">(You)</span>
+                  <span className="ml-2 text-purple-600">{t('you')}</span>
                 )}
                 {!player.isAlive && (
-                  <span className="ml-2 text-red-500 text-sm">Eliminated</span>
+                  <span className="ml-2 text-red-500 text-sm">{t('eliminated')}</span>
                 )}
               </span>
             </div>

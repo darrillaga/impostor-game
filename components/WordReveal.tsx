@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { getSocket } from "@/lib/socket";
+import { useTranslations } from "next-intl";
 
 interface WordRevealProps {
   roomId: string;
@@ -19,6 +20,8 @@ export default function WordReveal({
   impostorClue,
   isImpostor,
 }: WordRevealProps) {
+  const t = useTranslations('wordReveal');
+  const tCategories = useTranslations('categories');
   const [revealed, setRevealed] = useState(false);
   const y = useMotionValue(0);
   const opacity = useTransform(y, [-200, 0], [1, 0]);
@@ -35,34 +38,34 @@ export default function WordReveal({
       <div className="bg-white rounded-3xl shadow-2xl p-8 text-center min-h-[400px] flex flex-col items-center justify-center">
         <div className="mb-6">
           <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">
-            Category
+            {t('category')}
           </span>
-          <h3 className="text-2xl font-bold text-gray-700 mt-2">{category}</h3>
+          <h3 className="text-2xl font-bold text-gray-700 mt-2">{tCategories(category)}</h3>
         </div>
 
         {isImpostor ? (
           <div className="space-y-4">
             <div className="bg-red-100 border-2 border-red-500 rounded-2xl p-6">
               <span className="text-3xl font-bold text-red-600">
-                YOU ARE THE IMPOSTOR
+                {t('impostor')}
               </span>
             </div>
             <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-4">
-              <p className="text-sm text-gray-600 mb-2">Clue:</p>
+              <p className="text-sm text-gray-600 mb-2">{t('clue')}</p>
               <p className="text-lg font-medium text-gray-800">{impostorClue}</p>
             </div>
           </div>
         ) : (
           <div className="bg-green-100 border-2 border-green-500 rounded-2xl p-8">
             <span className="text-sm font-medium text-gray-600 uppercase">
-              Your Word
+              {t('yourWord')}
             </span>
             <h2 className="text-5xl font-bold text-green-600 mt-2">{word}</h2>
           </div>
         )}
 
         <p className="mt-8 text-gray-500">
-          Waiting for other players to reveal...
+          {t('waiting')}
         </p>
       </div>
     );
@@ -88,7 +91,7 @@ export default function WordReveal({
               d="M5 10l7-7m0 0l7 7m-7-7v18"
             />
           </svg>
-          <p className="text-xl font-medium">Swipe up to reveal</p>
+          <p className="text-xl font-medium">{t('swipeUp')}</p>
         </div>
       </motion.div>
 
@@ -103,7 +106,7 @@ export default function WordReveal({
         <div className="bg-gradient-to-br from-purple-600 to-pink-600 rounded-3xl p-12 shadow-2xl min-w-[300px]">
           <div className="bg-white bg-opacity-20 rounded-2xl p-8 backdrop-blur-sm">
             <span className="text-white text-sm font-medium uppercase tracking-wide">
-              Swipe Up
+              {t('swipeButton')}
             </span>
             <div className="mt-4">
               <svg
@@ -125,7 +128,7 @@ export default function WordReveal({
       </motion.div>
 
       <p className="mt-8 text-gray-500 text-sm z-10">
-        Drag the card upward to see your role
+        {t('dragInstruction')}
       </p>
     </div>
   );

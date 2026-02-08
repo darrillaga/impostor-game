@@ -49,6 +49,7 @@
   "discussion": {
     "title": "Ronda {round} - Tiempo de Discusión",
     "instruction": "¡Discutan quién creen que es el impostor!",
+    "playerOrder": "Orden de Habla",
     "startVoting": "Iniciar Votación"
   },
   "voting": {

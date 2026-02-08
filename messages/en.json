@@ -49,6 +49,7 @@
   "discussion": {
     "title": "Round {round} - Discussion Time",
     "instruction": "Discuss who you think the impostor is!",
+    "playerOrder": "Speaking Order",
     "startVoting": "Start Voting"
   },
   "voting": {

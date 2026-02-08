@@ -101,7 +101,7 @@ export default function Results({
       <Leaderboard players={players} currentPlayerId={null} />
 
       {isHost && (
-        <div className="mt-8">
+        <div className="mt-8 space-y-3">
           {gameOver ? (
             <button
               onClick={handlePlayAgain}
@@ -112,9 +112,9 @@ export default function Results({
           ) : (
             <button
               onClick={handleNextRound}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-4 px-6 rounded-lg hover:from-purple-700 hover:to-pink-700 transition transform hover:scale-105"
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-4 px-6 rounded-lg hover:from-purple-700 hover:to-pink-700 transition transform hover:scale-105 text-lg"
             >
-              {t('nextRound')}
+              {t('nextRound')} →
             </button>
           )}
         </div>

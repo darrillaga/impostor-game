@@ -275,6 +275,30 @@ export default function RoomPage() {
             <p className="text-gray-600 mb-6">
               {tDiscussion('instruction')}
             </p>
+
+            {/* Player Order Display */}
+            <div className="mb-6 bg-gray-50 rounded-2xl p-6">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">{tDiscussion('playerOrder')}</h3>
+              <div className="flex flex-wrap justify-center gap-3">
+                {players.filter(p => p.isAlive).map((player, index) => (
+                  <div
+                    key={player.id}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-full ${
+                      player.id === playerId
+                        ? "bg-purple-600 text-white"
+                        : "bg-white border-2 border-gray-300 text-gray-800"
+                    }`}
+                  >
+                    <span className="font-bold">{index + 1}</span>
+                    <span>{player.name}</span>
+                    {player.isHost && (
+                      <span className="text-xs">👑</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <Leaderboard players={players} currentPlayerId={playerId!} />
             {isHost && (
               <button

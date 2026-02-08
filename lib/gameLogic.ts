@@ -80,15 +80,20 @@ export function addPlayer(
 
 export function selectImpostors(gameState: GameState, count: number): void {
   const players = Array.from(gameState.players.values());
-  const shuffled = players.sort(() => Math.random() - 0.5);
 
   // Reset all players
   players.forEach(p => {
     p.isImpostor = false;
   });
 
-  // Select impostors
-  for (let i = 0; i < Math.min(count, players.length - 1); i++) {
+  // Exclude the first player (host) from being impostor
+  const eligiblePlayers = players.filter(p => !p.isHost);
+
+  // Shuffle eligible players
+  const shuffled = eligiblePlayers.sort(() => Math.random() - 0.5);
+
+  // Select impostors from eligible players only
+  for (let i = 0; i < Math.min(count, shuffled.length); i++) {
     shuffled[i].isImpostor = true;
   }
 

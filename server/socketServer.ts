@@ -240,6 +240,40 @@ export function initSocketServer(httpServer: HTTPServer) {
       }
     });
 
+    socket.on("forceEndVoting", ({ roomId }) => {
+      const gameState = rooms.get(roomId);
+      if (!gameState) return;
+
+      const player = gameState.players.get(socket.id);
+      if (!player?.isHost) return;
+
+      // Force end voting and tally current votes
+      const eliminatedId = tallyVotes(gameState);
+
+      if (eliminatedId) {
+        eliminatePlayer(gameState, eliminatedId);
+      }
+
+      // Check win condition
+      const { gameOver, impostorsWin } = checkWinCondition(gameState);
+
+      gameState.phase = gameOver ? "gameOver" : "results";
+
+      if (gameOver) {
+        updateScores(gameState, impostorsWin);
+      }
+
+      const eliminatedPlayer = eliminatedId ? gameState.players.get(eliminatedId) : null;
+
+      io.to(roomId).emit("votingComplete", {
+        eliminatedPlayer: eliminatedPlayer ? serializePlayer(eliminatedPlayer) : null,
+        votes: gameState.votes,
+        gameOver,
+        impostorsWin: gameOver ? impostorsWin : null,
+        players: serializePlayers(gameState),
+      });
+    });
+
     socket.on("nextRound", ({ roomId }) => {
       const gameState = rooms.get(roomId);
       if (!gameState) return;

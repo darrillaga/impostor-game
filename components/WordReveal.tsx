@@ -54,10 +54,6 @@ export default function WordReveal({
                 {t('impostor')}
               </span>
             </div>
-            <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-4">
-              <p className="text-sm text-gray-600 mb-2">{t('clue')}</p>
-              <p className="text-lg font-medium text-gray-800">{impostorClue}</p>
-            </div>
           </div>
         ) : (
           <div className="bg-green-100 border-2 border-green-500 rounded-2xl p-8">

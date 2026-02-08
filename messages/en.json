@@ -57,7 +57,8 @@
     "votes": "Votes: {voted} / {alive}",
     "eliminated": "You have been eliminated. Waiting for others to vote...",
     "submitted": "Vote Submitted",
-    "waiting": "Waiting for other players..."
+    "waiting": "Waiting for other players...",
+    "finishVoting": "Finish & Reveal Results"
   },
   "results": {
     "impostorsWin": "Impostors Win!",

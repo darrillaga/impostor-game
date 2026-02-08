@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { getSocket } from "@/lib/socket";
 import { Player } from "@/types/game";
+import { useTranslations } from "next-intl";
 
 interface VotingPhaseProps {
   roomId: string;
@@ -15,9 +16,11 @@ export default function VotingPhase({
   players,
   currentPlayerId,
 }: VotingPhaseProps) {
+  const t = useTranslations('voting');
   const [voted, setVoted] = useState(false);
   const currentPlayer = players.find(p => p.id === currentPlayerId);
   const alivePlayers = players.filter(p => p.isAlive);
+  const isHost = currentPlayer?.isHost || false;
 
   const handleVote = (targetId: string) => {
     if (voted || !currentPlayer?.isAlive) return;
@@ -26,23 +29,27 @@ export default function VotingPhase({
     setVoted(true);
   };
 
+  const handleFinishVoting = () => {
+    getSocket().emit("forceEndVoting", { roomId });
+  };
+
   const votedCount = players.filter(p => p.hasVoted).length;
   const aliveCount = alivePlayers.length;
 
   return (
     <div className="bg-white rounded-3xl shadow-2xl p-8">
       <div className="text-center mb-8">
-        <h2 className="text-4xl font-bold text-gray-800 mb-2">Voting Time</h2>
-        <p className="text-gray-600">Who do you think is the impostor?</p>
+        <h2 className="text-4xl font-bold text-gray-800 mb-2">{t('title')}</h2>
+        <p className="text-gray-600">{t('instruction')}</p>
         <div className="mt-4 text-sm text-gray-500">
-          Votes: {votedCount} / {aliveCount}
+          {t('votes', { voted: votedCount, alive: aliveCount })}
         </div>
       </div>
 
       {!currentPlayer?.isAlive ? (
         <div className="text-center py-8">
           <p className="text-xl text-gray-600">
-            You have been eliminated. Waiting for others to vote...
+            {t('eliminated')}
           </p>
         </div>
       ) : voted ? (
@@ -61,9 +68,17 @@ export default function VotingPhase({
                 d="M5 13l4 4L19 7"
               />
             </svg>
-            <p className="text-xl font-semibold text-green-700">Vote Submitted</p>
-            <p className="text-gray-600 mt-2">Waiting for other players...</p>
+            <p className="text-xl font-semibold text-green-700">{t('submitted')}</p>
+            <p className="text-gray-600 mt-2">{t('waiting')}</p>
           </div>
+          {isHost && votedCount >= 2 && (
+            <button
+              onClick={handleFinishVoting}
+              className="mt-6 bg-gradient-to-r from-orange-600 to-red-600 text-white font-bold py-3 px-8 rounded-lg hover:from-orange-700 hover:to-red-700 transition transform hover:scale-105"
+            >
+              {t('finishVoting')}
+            </button>
+          )}
         </div>
       ) : (
         <div className="grid gap-4">

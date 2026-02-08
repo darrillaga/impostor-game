@@ -206,7 +206,7 @@ export default function RoomPage() {
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
                 placeholder={t('namePlaceholder')}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
+                className="w-full px-4 py-3 border-2 border-gray-400 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition text-gray-900 placeholder:text-gray-400"
                 onKeyPress={(e) => e.key === "Enter" && handleJoin()}
               />
             </div>
@@ -220,7 +220,7 @@ export default function RoomPage() {
                 value={roomPassword}
                 onChange={(e) => setRoomPassword(e.target.value)}
                 placeholder={t('passwordPlaceholder')}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
+                className="w-full px-4 py-3 border-2 border-gray-400 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition text-gray-900 placeholder:text-gray-400"
                 onKeyPress={(e) => e.key === "Enter" && handleJoin()}
               />
             </div>

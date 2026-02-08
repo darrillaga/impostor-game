@@ -11,6 +11,8 @@ const customJestConfig = {
   testEnvironment: 'jest-environment-jsdom',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
+    '^nanoid$': '<rootDir>/__mocks__/nanoid.js',
+    '^uuid$': '<rootDir>/__mocks__/uuid.js',
   },
   testMatch: [
     '**/__tests__/**/*.test.ts',
@@ -20,8 +22,12 @@ const customJestConfig = {
     'lib/**/*.{ts,tsx}',
     'server/**/*.{ts,tsx}',
     'components/**/*.{ts,tsx}',
+    'ai/**/*.{ts,tsx}',
     '!**/*.d.ts',
     '!**/node_modules/**',
+  ],
+  transformIgnorePatterns: [
+    'node_modules/(?!(nanoid|uuid)/)',
   ],
 }
 

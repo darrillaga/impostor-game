@@ -17,6 +17,7 @@ export interface Player {
   score: number;
   hasVoted?: boolean;
   revealedWord?: boolean;
+  joinOrder: number;
 }
 
 export interface Vote {
@@ -73,6 +74,7 @@ export function addPlayer(
     score: 0,
     hasVoted: false,
     revealedWord: false,
+    joinOrder: gameState.players.size,
   };
   gameState.players.set(playerId, player);
   return player;

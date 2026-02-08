@@ -325,11 +325,14 @@ function serializePlayer(player: Player) {
     isHost: player.isHost,
     score: player.score,
     hasVoted: player.hasVoted,
+    joinOrder: player.joinOrder,
   };
 }
 
 function serializePlayers(gameState: GameState) {
-  return Array.from(gameState.players.values()).map(serializePlayer);
+  return Array.from(gameState.players.values())
+    .sort((a, b) => a.joinOrder - b.joinOrder)
+    .map(serializePlayer);
 }
 
 function serializeGameState(gameState: GameState) {

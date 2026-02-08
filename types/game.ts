@@ -6,6 +6,7 @@ export interface Player {
   isAlive: boolean;
   hasVoted?: boolean;
   isImpostor?: boolean;
+  joinOrder: number;
 }
 
 export interface GameData {

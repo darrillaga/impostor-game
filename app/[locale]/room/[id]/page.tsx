@@ -113,8 +113,11 @@ export default function RoomPage() {
       setEliminatedPlayer(null);
     });
 
-    socket.on("playerVoted", () => {
-      // Could add visual feedback here
+    socket.on("playerVoted", (data) => {
+      // Update players state to reflect new vote counts
+      if (data.players) {
+        setPlayers(data.players);
+      }
     });
 
     socket.on("votingComplete", (data) => {
@@ -275,6 +278,20 @@ export default function RoomPage() {
             <p className="text-gray-600 mb-6">
               {tDiscussion('instruction')}
             </p>
+
+            {/* Show the word/role reminder */}
+            {gameData.word && !gameData.isImpostor && (
+              <div className="mb-6 bg-green-50 border-2 border-green-500 rounded-xl p-4">
+                <p className="text-sm text-gray-600 mb-1">Your word:</p>
+                <p className="text-2xl font-bold text-green-600">{gameData.word}</p>
+              </div>
+            )}
+            {gameData.isImpostor && (
+              <div className="mb-6 bg-red-50 border-2 border-red-500 rounded-xl p-4">
+                <p className="text-sm text-gray-600 mb-1">You are the impostor</p>
+                <p className="text-xl font-semibold text-red-600">Category: {gameData.category}</p>
+              </div>
+            )}
 
             {/* Player Order Display */}
             <div className="mb-6 bg-gray-50 rounded-2xl p-6">

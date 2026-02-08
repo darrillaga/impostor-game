@@ -205,7 +205,11 @@ export function initSocketServer(httpServer: HTTPServer) {
       gameState.votes.push({ voterId: socket.id, targetId });
       voter.hasVoted = true;
 
-      io.to(roomId).emit("playerVoted", { voterId: socket.id });
+      // Broadcast updated player state so everyone sees the vote count
+      io.to(roomId).emit("playerVoted", {
+        voterId: socket.id,
+        players: serializePlayers(gameState)
+      });
 
       // Check if all alive players voted
       const alivePlayers = Array.from(gameState.players.values()).filter(p => p.isAlive);

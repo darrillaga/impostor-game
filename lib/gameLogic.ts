@@ -108,14 +108,22 @@ export function checkWinCondition(gameState: GameState): {
   const aliveImpostors = alivePlayers.filter(p => p.isImpostor);
   const aliveNormals = alivePlayers.filter(p => !p.isImpostor);
 
-  // Impostors win if they equal or outnumber normal players
-  if (aliveImpostors.length >= aliveNormals.length && aliveImpostors.length > 0) {
-    return { gameOver: true, impostorsWin: true };
-  }
-
   // Normals win if all impostors are eliminated
   if (aliveImpostors.length === 0) {
     return { gameOver: true, impostorsWin: false };
+  }
+
+  // For 1 impostor games: game ends after first round (impostor wins if still alive)
+  if (gameState.impostorCount === 1 && gameState.roundNumber >= 1) {
+    return {
+      gameOver: true,
+      impostorsWin: aliveImpostors.length > 0
+    };
+  }
+
+  // For multi-impostor games: Impostors win if they equal or outnumber normal players
+  if (aliveImpostors.length >= aliveNormals.length && aliveImpostors.length > 0) {
+    return { gameOver: true, impostorsWin: true };
   }
 
   return { gameOver: false, impostorsWin: false };

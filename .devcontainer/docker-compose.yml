@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspace:cached
+    command: sleep infinity
+    network_mode: host
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - ../.env
+
+  # Note: Pinecone is a cloud service and cannot run locally
+  # You will need to sign up at https://www.pinecone.io/ and get API keys
+  # Add your credentials to the .env file

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { getSocket } from "@/lib/socket";
 import { useTranslations } from "next-intl";
+import VideoRecorder from "./VideoRecorder";
 
 interface WordRevealProps {
   roomId: string;
@@ -25,6 +26,8 @@ export default function WordReveal({
   const t = useTranslations('wordReveal');
   const tCategories = useTranslations('categories');
   const [revealed, setRevealed] = useState(false);
+  const [showRecorder, setShowRecorder] = useState(false);
+  const [recordingComplete, setRecordingComplete] = useState(false);
   const y = useMotionValue(0);
   const opacity = useTransform(y, [-200, 0], [1, 0]);
 
@@ -35,11 +38,85 @@ export default function WordReveal({
     }
   };
 
+  const handleStartRecording = () => {
+    setShowRecorder(true);
+  };
+
+  const handleRecordingComplete = async (blob: Blob) => {
+    try {
+      // Convert blob to base64 for transmission
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64data = reader.result;
+        getSocket().emit("uploadRecording", {
+          roomId,
+          videoData: base64data,
+        });
+        setRecordingComplete(true);
+      };
+      reader.readAsDataURL(blob);
+    } catch (error) {
+      console.error("Error uploading recording:", error);
+    }
+  };
+
+  const handleSkipRecording = () => {
+    getSocket().emit("playerReady", { roomId });
+  };
+
   const handleReady = () => {
     getSocket().emit("playerReady", { roomId });
   };
 
   if (revealed) {
+    // Show video recorder
+    if (showRecorder && !recordingComplete) {
+      return (
+        <div className="bg-white rounded-3xl shadow-2xl p-8 text-center min-h-[400px] flex flex-col items-center justify-center">
+          <h3 className="text-2xl font-bold text-gray-800 mb-6">
+            Record yourself saying the word
+          </h3>
+          <VideoRecorder
+            onRecordingComplete={handleRecordingComplete}
+            maxDuration={15}
+            autoStart={false}
+          />
+        </div>
+      );
+    }
+
+    // Show completion message after recording
+    if (recordingComplete) {
+      return (
+        <div className="bg-white rounded-3xl shadow-2xl p-8 text-center min-h-[400px] flex flex-col items-center justify-center">
+          <div className="mb-6">
+            <svg
+              className="w-20 h-20 mx-auto text-green-500 mb-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <h3 className="text-2xl font-bold text-gray-800">Recording Uploaded!</h3>
+            <p className="text-gray-600 mt-2">Waiting for other players...</p>
+          </div>
+          <button
+            onClick={handleReady}
+            className="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-3 px-8 rounded-lg hover:from-purple-700 hover:to-pink-700 transition transform hover:scale-105"
+          >
+            {t('ready')}
+          </button>
+        </div>
+      );
+    }
+
+    // Show word/role and recording option
     return (
       <div className="bg-white rounded-3xl shadow-2xl p-8 text-center min-h-[400px] flex flex-col items-center justify-center">
         <div className="mb-6">
@@ -72,12 +149,20 @@ export default function WordReveal({
           </div>
         )}
 
-        <button
-          onClick={handleReady}
-          className="mt-8 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-3 px-8 rounded-lg hover:from-purple-700 hover:to-pink-700 transition transform hover:scale-105"
-        >
-          {t('ready')}
-        </button>
+        <div className="mt-8 space-y-3 w-full max-w-md">
+          <button
+            onClick={handleStartRecording}
+            className="w-full bg-gradient-to-r from-red-600 to-pink-600 text-white font-bold py-3 px-8 rounded-lg hover:from-red-700 hover:to-pink-700 transition transform hover:scale-105"
+          >
+            Record Word (Optional)
+          </button>
+          <button
+            onClick={handleSkipRecording}
+            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-3 px-8 rounded-lg hover:from-purple-700 hover:to-pink-700 transition transform hover:scale-105"
+          >
+            Skip Recording & Ready
+          </button>
+        </div>
       </div>
     );
   }

@@ -16,6 +16,8 @@ import {
 import { getRandomCategory, getRandomWord } from "../lib/gameData";
 
 const rooms = new Map<string, GameState>();
+// Store video recordings per room: Map<roomId, Map<playerId, videoData>>
+const videoRecordings = new Map<string, Map<string, string>>();
 
 export function initSocketServer(httpServer: HTTPServer) {
   const io = new SocketIOServer(httpServer, {
@@ -182,11 +184,38 @@ export function initSocketServer(httpServer: HTTPServer) {
 
       if (allReady) {
         gameState.phase = "discussion";
+
+        // Send video recordings to all players
+        const roomVideos = videoRecordings.get(roomId);
+        if (roomVideos && roomVideos.size > 0) {
+          io.to(roomId).emit("videosAvailable", {
+            videos: Array.from(roomVideos.entries()).map(([playerId, videoData]) => ({
+              playerId,
+              videoData,
+            })),
+          });
+        }
+
         io.to(roomId).emit("phaseChanged", {
           phase: "discussion",
           roundNumber: gameState.roundNumber,
         });
       }
+    });
+
+    socket.on("uploadRecording", ({ roomId, videoData }) => {
+      const gameState = rooms.get(roomId);
+      if (!gameState) return;
+
+      // Initialize video storage for room if not exists
+      if (!videoRecordings.has(roomId)) {
+        videoRecordings.set(roomId, new Map());
+      }
+
+      const roomVideos = videoRecordings.get(roomId)!;
+      roomVideos.set(socket.id, videoData);
+
+      console.log(`Video uploaded for player ${socket.id} in room ${roomId}`);
     });
 
     socket.on("startVoting", ({ roomId }) => {
@@ -296,6 +325,9 @@ export function initSocketServer(httpServer: HTTPServer) {
       const player = gameState.players.get(socket.id);
       if (!player?.isHost) return;
 
+      // Clear video recordings from previous round
+      videoRecordings.delete(roomId);
+
       resetForNextRound(gameState);
       gameState.phase = "discussion";
 
@@ -311,6 +343,9 @@ export function initSocketServer(httpServer: HTTPServer) {
 
       const player = gameState.players.get(socket.id);
       if (!player?.isHost) return;
+
+      // Clear video recordings
+      videoRecordings.delete(roomId);
 
       resetForNextGame(gameState);
 

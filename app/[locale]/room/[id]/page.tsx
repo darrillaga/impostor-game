@@ -8,6 +8,7 @@ import WordReveal from "@/components/WordReveal";
 import VotingPhase from "@/components/VotingPhase";
 import Results from "@/components/Results";
 import Leaderboard from "@/components/Leaderboard";
+import VideoPlayback from "@/components/VideoPlayback";
 import { useTranslations } from "next-intl";
 import { Player, GameData } from "@/types/game";
 
@@ -39,6 +40,7 @@ export default function RoomPage() {
   const [gameOver, setGameOver] = useState(false);
   const [impostorsWin, setImpostorsWin] = useState(false);
   const [error, setError] = useState("");
+  const [playerVideos, setPlayerVideos] = useState<Array<{playerId: string; videoData: string}>>([]);
 
   useEffect(() => {
     const socket = getSocket();
@@ -151,6 +153,10 @@ export default function RoomPage() {
       setEliminatedPlayer(null);
     });
 
+    socket.on("videosAvailable", (data) => {
+      setPlayerVideos(data.videos);
+    });
+
     socket.on("error", (data) => {
       setError(data.message);
       setTimeout(() => setError(""), 3000);
@@ -167,6 +173,7 @@ export default function RoomPage() {
       socket.off("playerVoted");
       socket.off("votingComplete");
       socket.off("gameReset");
+      socket.off("videosAvailable");
       socket.off("error");
     };
   }, [roomId, joined, playerName, roomPassword]);
@@ -323,6 +330,18 @@ export default function RoomPage() {
                 ))}
               </div>
             </div>
+
+            {/* Video Recordings */}
+            {playerVideos.length > 0 && (
+              <VideoPlayback
+                playerVideos={playerVideos.map(video => ({
+                  playerId: video.playerId,
+                  playerName: players.find(p => p.id === video.playerId)?.name || "Unknown",
+                  videoUrl: video.videoData,
+                }))}
+                currentPlayerId={playerId!}
+              />
+            )}
 
             <Leaderboard players={players} currentPlayerId={playerId!} />
             {isHost && (

@@ -7,7 +7,8 @@ let socket: Socket | null = null;
 export function getSocket(): Socket {
   if (!socket) {
     socket = io({
-      path: "/api/socket",
+      path: "/socket.io/",
+      transports: ["websocket", "polling"],
     });
   }
   return socket;

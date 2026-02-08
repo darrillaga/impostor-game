@@ -8,6 +8,10 @@ export type GamePhase =
   | "results"
   | "gameOver";
 
+export type GameMode =
+  | "clue-random"      // Show clues, anyone can be impostor (including host)
+  | "category-nofirst"; // Only show category, host cannot be impostor
+
 export interface Player {
   id: string;
   name: string;
@@ -29,6 +33,7 @@ export interface GameState {
   roomId: string;
   roomPassword: string;
   phase: GamePhase;
+  gameMode: GameMode;
   players: Map<string, Player>;
   impostorCount: number;
   category: Category | null;
@@ -48,6 +53,7 @@ export function createRoom(roomId: string, roomPassword: string): GameState {
     roomId,
     roomPassword,
     phase: "lobby",
+    gameMode: "category-nofirst", // Default mode: category only, host protected
     players: new Map(),
     impostorCount: 1,
     category: null,
@@ -88,13 +94,20 @@ export function selectImpostors(gameState: GameState, count: number): void {
     p.isImpostor = false;
   });
 
-  // Exclude the first player (host) from being impostor
-  const eligiblePlayers = players.filter(p => !p.isHost);
+  // Determine eligible players based on game mode
+  let eligiblePlayers: Player[];
+  if (gameState.gameMode === "category-nofirst") {
+    // Exclude the host from being impostor
+    eligiblePlayers = players.filter(p => !p.isHost);
+  } else {
+    // clue-random mode: everyone can be impostor
+    eligiblePlayers = players;
+  }
 
   // Shuffle eligible players
   const shuffled = eligiblePlayers.sort(() => Math.random() - 0.5);
 
-  // Select impostors from eligible players only
+  // Select impostors from eligible players
   for (let i = 0; i < Math.min(count, shuffled.length); i++) {
     shuffled[i].isImpostor = true;
   }

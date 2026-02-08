@@ -110,6 +110,17 @@ export function initSocketServer(httpServer: HTTPServer) {
       io.to(roomId).emit("impostorCountUpdated", { count });
     });
 
+    socket.on("setGameMode", ({ roomId, gameMode }) => {
+      const gameState = rooms.get(roomId);
+      if (!gameState) return;
+
+      const player = gameState.players.get(socket.id);
+      if (!player?.isHost) return;
+
+      gameState.gameMode = gameMode;
+      io.to(roomId).emit("gameModeUpdated", { gameMode });
+    });
+
     socket.on("startGame", ({ roomId }) => {
       const gameState = rooms.get(roomId);
       if (!gameState) return;
@@ -339,6 +350,7 @@ function serializeGameState(gameState: GameState) {
   return {
     roomId: gameState.roomId,
     phase: gameState.phase,
+    gameMode: gameState.gameMode,
     players: serializePlayers(gameState),
     impostorCount: gameState.impostorCount,
     category: gameState.category?.name || null,

@@ -9,6 +9,7 @@ interface LobbyProps {
   players: Player[];
   isHost: boolean;
   impostorCount: number;
+  gameMode: "clue-random" | "category-nofirst";
   onShareLink: () => void;
 }
 
@@ -17,6 +18,7 @@ export default function Lobby({
   players,
   isHost,
   impostorCount,
+  gameMode,
   onShareLink,
 }: LobbyProps) {
   const t = useTranslations('lobby');
@@ -35,6 +37,10 @@ export default function Lobby({
       return;
     }
     getSocket().emit("setImpostorCount", { roomId, count });
+  };
+
+  const handleGameModeChange = (mode: "clue-random" | "category-nofirst") => {
+    getSocket().emit("setGameMode", { roomId, gameMode: mode });
   };
 
   return (
@@ -72,27 +78,59 @@ export default function Lobby({
       </div>
 
       {isHost && (
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            {t('impostorCount')}
-          </label>
-          <div className="flex gap-2">
-            {[1, 2, 3].map((count) => (
+        <>
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {t('gameMode')}
+            </label>
+            <div className="flex flex-col gap-2">
               <button
-                key={count}
-                onClick={() => handleImpostorCountChange(count)}
-                className={`flex-1 py-2 px-4 rounded-lg font-medium transition ${
-                  impostorCount === count
+                onClick={() => handleGameModeChange("category-nofirst")}
+                className={`py-3 px-4 rounded-lg font-medium transition text-left ${
+                  gameMode === "category-nofirst"
                     ? "bg-purple-600 text-white"
                     : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                 }`}
-                disabled={count >= players.length}
               >
-                {count}
+                <div className="font-bold">{t('modeCategoryName')}</div>
+                <div className="text-sm opacity-90">{t('modeCategoryDesc')}</div>
               </button>
-            ))}
+              <button
+                onClick={() => handleGameModeChange("clue-random")}
+                className={`py-3 px-4 rounded-lg font-medium transition text-left ${
+                  gameMode === "clue-random"
+                    ? "bg-purple-600 text-white"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                }`}
+              >
+                <div className="font-bold">{t('modeCliName')}</div>
+                <div className="text-sm opacity-90">{t('modeCluDesc')}</div>
+              </button>
+            </div>
           </div>
-        </div>
+
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {t('impostorCount')}
+            </label>
+            <div className="flex gap-2">
+              {[1, 2, 3].map((count) => (
+                <button
+                  key={count}
+                  onClick={() => handleImpostorCountChange(count)}
+                  className={`flex-1 py-2 px-4 rounded-lg font-medium transition ${
+                    impostorCount === count
+                      ? "bg-purple-600 text-white"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  }`}
+                  disabled={count >= players.length}
+                >
+                  {count}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
       )}
 
       {isHost && (

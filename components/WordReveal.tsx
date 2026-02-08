@@ -11,6 +11,7 @@ interface WordRevealProps {
   word: string | null;
   impostorClue: string | null;
   isImpostor: boolean;
+  gameMode: "clue-random" | "category-nofirst";
 }
 
 export default function WordReveal({
@@ -19,6 +20,7 @@ export default function WordReveal({
   word,
   impostorClue,
   isImpostor,
+  gameMode,
 }: WordRevealProps) {
   const t = useTranslations('wordReveal');
   const tCategories = useTranslations('categories');
@@ -54,6 +56,12 @@ export default function WordReveal({
                 {t('impostor')}
               </span>
             </div>
+            {gameMode === "clue-random" && impostorClue && (
+              <div className="bg-yellow-50 border-2 border-yellow-400 rounded-xl p-4">
+                <p className="text-sm text-gray-600 mb-1">{t('clue')}</p>
+                <p className="text-xl font-semibold text-yellow-700">{impostorClue}</p>
+              </div>
+            )}
           </div>
         ) : (
           <div className="bg-green-100 border-2 border-green-500 rounded-2xl p-8">

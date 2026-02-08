@@ -34,6 +34,7 @@ export default function RoomPage() {
     roundNumber: 0,
   });
   const [impostorCount, setImpostorCount] = useState(1);
+  const [gameMode, setGameMode] = useState<"clue-random" | "category-nofirst">("category-nofirst");
   const [eliminatedPlayer, setEliminatedPlayer] = useState<Player | null>(null);
   const [gameOver, setGameOver] = useState(false);
   const [impostorsWin, setImpostorsWin] = useState(false);
@@ -87,6 +88,10 @@ export default function RoomPage() {
 
     socket.on("impostorCountUpdated", (data) => {
       setImpostorCount(data.count);
+    });
+
+    socket.on("gameModeUpdated", (data) => {
+      setGameMode(data.gameMode);
     });
 
     socket.on("gameStarted", (data) => {
@@ -156,6 +161,7 @@ export default function RoomPage() {
       socket.off("joinedRoom");
       socket.off("playerJoined");
       socket.off("impostorCountUpdated");
+      socket.off("gameModeUpdated");
       socket.off("gameStarted");
       socket.off("phaseChanged");
       socket.off("playerVoted");
@@ -256,6 +262,7 @@ export default function RoomPage() {
             players={players}
             isHost={isHost}
             impostorCount={impostorCount}
+            gameMode={gameMode}
             onShareLink={shareLink}
           />
         )}
@@ -267,6 +274,7 @@ export default function RoomPage() {
             word={gameData.word}
             impostorClue={gameData.impostorClue}
             isImpostor={gameData.isImpostor}
+            gameMode={gameMode}
           />
         )}
 

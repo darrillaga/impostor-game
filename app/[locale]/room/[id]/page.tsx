@@ -17,6 +17,7 @@ export default function RoomPage() {
   const params = useParams();
   const searchParams = useSearchParams();
   const roomId = params.id as string;
+  const locale = params.locale as string;
   const passwordParam = searchParams.get("password");
 
   const [joined, setJoined] = useState(false);
@@ -172,7 +173,7 @@ export default function RoomPage() {
   };
 
   const shareLink = () => {
-    const link = `${window.location.origin}/room/${roomId}?password=${encodeURIComponent(roomPassword)}`;
+    const link = `${window.location.origin}/${locale}/room/${roomId}?password=${encodeURIComponent(roomPassword)}`;
     navigator.clipboard.writeText(link);
     alert("Link copied to clipboard!");
   };
